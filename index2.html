@@ -1,0 +1,77 @@
+<html lang="zh-CN">
+	<head>
+	  <meta charset="UTF-8"/>
+		<title>有序加载</title>
+		<style>
+			body,html{
+				height: 100%;
+			}
+		  .box {
+				text-align: center;
+			}
+			.btn {
+				display: inline-block;
+				height: 30px;
+				line-height: 30px;
+				border:1px solid #ccc;
+				background-color:#fff ;
+				padding: 0 10px;
+				margin-right: 50px;
+				color:#333;
+			}
+			.btn:hover {
+				background-color:#eee;
+				cursor: auto;
+			}
+			.loading {
+				position:fixed;
+				top:0px;
+				left:0px;
+				width: 100% ;
+				height:100%	;
+				background-color:#eee;
+				text-align: center;
+				font-size: 30px;
+		  }
+		  .progress{
+		  	margin-top: 300px;
+		  }
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<img src="https://i02piccdn.sogoucdn.com/72d2a377489ce365" alt="pic" id="img" />
+			<p>
+				<a  herf="" class="btn" data-control="prev">上一页</a>
+				<a  herf="" class="btn" data-control="next">下一页</a>
+			</p>
+		</div>
+	</body>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/imgPreload.js"></script>
+	<script type="text/javascript">
+		//有序预加载其实就是在加载一张图片后再去请求下一张	
+		var index=0;
+		$.ajax({
+			type:"get",
+			url:"js/img.json",
+			async:true,
+			success:function(data){
+				var count =0,
+				img=data.imgs
+		    len=img.length;
+		    $.preload(img,{
+		    	order:true
+		    })
+			 $(".btn").on('click',function(){
+					if('prev'===$(this).data('control')){
+						Math.max(0,--index);
+					}else{
+						Math.min(len,++index);
+					}
+					$("#img").attr("src",img[index]);	
+			  })
+			}
+		})
+	</script>
+</html>
